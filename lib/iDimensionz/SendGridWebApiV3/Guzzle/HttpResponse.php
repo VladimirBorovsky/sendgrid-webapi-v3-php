@@ -35,6 +35,8 @@ use iDimensionz\SendGridWebApiV3\HttpResponseInterface;
 
 class HttpResponse extends Response implements HttpResponseInterface
 {
+    private $content;
+    
     /**
      * @param int|string      $statusCode The response status code (e.g. 200)
      * @param array           $headers    The response headers
@@ -54,7 +56,9 @@ class HttpResponse extends Response implements HttpResponseInterface
 
     public function getBody()
     {
-        return parent::getBody()->getContents();
+        $content = parent::getBody()->getContents();
+        if ($content) $this->content = $content;
+        return $this->content;
     }
 
     public function setBodyContent($body)

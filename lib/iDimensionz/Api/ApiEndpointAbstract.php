@@ -73,12 +73,12 @@ abstract class ApiEndpointAbstract
      * @param string $command
      * @return string
      */
-    public function get($command)
+    public function get($command, $options = [])
     {
         if (!empty($command)) {
             $command = "/{$command}";
         }
-        $this->setLastSendGridResponse($this->getSendGridRequest()->get($this->getEndpoint() . $command));
+        $this->setLastSendGridResponse($this->getSendGridRequest()->get($this->getEndpoint() . $command, $options));
         return $this->getLastSendGridResponse()->getContent();
     }
 
@@ -87,16 +87,14 @@ abstract class ApiEndpointAbstract
      * @param string $data JSON encoded data
      * @return string
      */
-    public function patch($command, $data)
+    public function patch($command, $data, $options = [])
     {
-        $body = [
-            'body' => $data
-        ];
+        $options['body'] = json_encode($data);
         if (!empty($command)) {
             $command = "/{$command}";
         }
         $this->setLastSendGridResponse(
-            $this->getSendGridRequest()->patch($this->getEndpoint() . $command, $body)
+            $this->getSendGridRequest()->patch($this->getEndpoint() . $command, $options)
         );
 
         return $this->getLastSendGridResponse()->getContent();
@@ -107,16 +105,14 @@ abstract class ApiEndpointAbstract
      * @param array $data
      * @return string
      */
-    public function post($command, $data)
+    public function post($command, $data, $options = [])
     {
-        $body = [
-            'body'  =>  $data
-        ];
+        $options['body'] = json_encode($data);
         if (!empty($command)) {
             $command = "/{$command}";
         }
         $this->setLastSendGridResponse(
-            $this->getSendGridRequest()->post($this->getEndpoint() . $command, $body)
+            $this->getSendGridRequest()->post($this->getEndpoint() . $command, $options)
         );
 
         return $this->getLastSendGridResponse()->getContent();

@@ -118,9 +118,16 @@ class SendGridResponse
      */
     public function getContent()
     {
-        $content = $this->isContentTypeJson() ? $this->getHttpResponse()->json() : $this->getHttpResponse()->getBody();
-
-        return $content;
+        if ($this->getStatusCode() == 204) return '';
+        
+        if ($this->isContentTypeJson()) {
+            if (!strlen($this->getHttpResponse()->getBody())) return '';
+            return $this->getHttpResponse()->json();
+        } else {
+            return $this->getHttpResponse()->getBody();
+        }
+        //$content = $this->isContentTypeJson() ? $this->getHttpResponse()->json() : $this->getHttpResponse()->getBody();
+        //return $content;
     }
 
     /**

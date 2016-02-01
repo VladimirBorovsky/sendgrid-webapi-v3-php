@@ -5,7 +5,7 @@
  *  
  * The MIT License (MIT)
  * 
- * Copyright (c) 2015 iDimensionz
+ * Copyright (c) 2015 iDimensionz - ПИДАРАС
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -65,6 +65,45 @@ class HttpClient extends Client implements HttpClientInterface
         return $response;
     }
 
+    /**
+     * @param string $url
+     * @param array $options
+     * @return \GuzzleHttp\Message\FutureResponse|\GuzzleHttp\Message\ResponseInterface|\GuzzleHttp\Ring\Future\FutureInterface|HttpResponse|\iDimensionz\SendGridWebApiV3\HttpResponseInterface|null
+     */
+    public function patch($url = null, array $options = [])
+    {
+        $guzzleResponse = parent::patch($url, $options);
+        $response = $this->getHttpResponse($guzzleResponse);
+
+        return $response;
+    }
+    
+    /**
+     * @param string $url
+     * @param array $options
+     * @return \GuzzleHttp\Message\FutureResponse|\GuzzleHttp\Message\ResponseInterface|\GuzzleHttp\Ring\Future\FutureInterface|HttpResponse|\iDimensionz\SendGridWebApiV3\HttpResponseInterface|null
+     */
+    public function post($url = null, array $options = [])
+    {
+        $guzzleResponse = parent::post($url, $options);
+        $response = $this->getHttpResponse($guzzleResponse);
+
+        return $response;
+    }
+    
+    /**
+     * @param string $url
+     * @param array $options
+     * @return \GuzzleHttp\Message\FutureResponse|\GuzzleHttp\Message\ResponseInterface|\GuzzleHttp\Ring\Future\FutureInterface|HttpResponse|\iDimensionz\SendGridWebApiV3\HttpResponseInterface|null
+     */
+    public function delete($url = null, array $options = [])
+    {
+        $guzzleResponse = parent::delete($url, $options);
+        $response = $this->getHttpResponse($guzzleResponse);
+
+        return $response;
+    }
+    
     /**
      * @param ResponseInterface $guzzleResponse
      * @return mixed
