@@ -45,7 +45,7 @@ class ContactsApi extends SendGridApiEndpointAbstract
 
     
     /**
-     * @return 
+     * @return array
      */
     public function getAllRecipients($page=1, $page_size=100)
     {
@@ -75,6 +75,17 @@ class ContactsApi extends SendGridApiEndpointAbstract
     }
 
     /**
+     * @param string $id UUID of recipient to retrieve
+     * @return array
+     */
+    public function getRecipient($recipientId)
+    {
+        $recipientData = $this->get('recipients/'.$recipientId);
+        $recipientDto = new TemplateDto($recipientData);
+        return $recipientDto;
+    }
+    
+    /**
      * @param array RecipientsDto
      * @return array
      * @throws \InvalidArgumentException
@@ -98,8 +109,8 @@ class ContactsApi extends SendGridApiEndpointAbstract
     }
     
     /**
-     * @param string $recipientId UUID of the template to delete
-     * @return bool  Returns true if the template was deleted. False otherwise.
+     * @param string $recipientId UUID of the Recipient to delete
+     * @return bool  Returns true if the Recipient was deleted. False otherwise.
      */
     public function deleteRecipient($recipientId)
     {
@@ -141,6 +152,16 @@ class ContactsApi extends SendGridApiEndpointAbstract
         }
     }
     
+    /**
+     * @param string $listId UUID of the List to delete
+     * @return bool  Returns true if the List was deleted. False otherwise.
+     */
+    public function deleteList($listId)
+    {
+        $this->delete('lists/'.$listId, ['decode_content'=>false]);
+        return (bool)(204 == $this->getLastSendGridResponse()->getStatusCode());
+    }
+    
     
     /**
      * @param int $listId
@@ -151,6 +172,19 @@ class ContactsApi extends SendGridApiEndpointAbstract
     public function addRecipientToList($listId, $recipientId)
     {
         $this->post('lists/'.$listId.'/recipients/'.$recipientId, []);
+        return (bool)(201 == $this->getLastSendGridResponse()->getStatusCode());
+    }
+    
+    /**
+     * @param int $listId
+     * @param array $recipientIds
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    public function addRecipientsToList($listId, $recipientIds)
+    {
+        
+        $this->post('lists/'.$listId.'/recipients/', $recipientIds);
         return (bool)(201 == $this->getLastSendGridResponse()->getStatusCode());
     }
     

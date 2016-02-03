@@ -81,47 +81,47 @@ class CampaignsApi extends SendGridApiEndpointAbstract
     {
         $campaignData = $campaignDto->getUpdatedFields();
         $result = $this->post('', $campaignData);
-        //$templateDto = new TemplateDto($templateData);
+        //$campaignDto = new CampaignDto($campaignData);
 var_dump($result); exit();
         return $result;
     }
 
     /**
-     * @param string $templateId UUID of template to retrieve
-     * @return TemplateDto
+     * @param string $campaignId UUID of campaign to retrieve
+     * @return CampaignDto
      */
-    public function getTemplate($templateId)
+    public function getCampaign($campaignId)
     {
-        $templateData = $this->get("/{$templateId}");
-        $templateDto = new TemplateDto($templateData);
+        $campaignData = $this->get("/{$campaignId}");
+        $campaignDto = new CampaignDto($campaignData);
 
-        return $templateDto;
+        return $campaignDto;
     }
 
     /**
-     * @param string $templateId UUID of template to update
+     * @param string $campaignId UUID of campaign to update
      * @param string $newName
-     * @return TemplateDto
+     * @return CampaignDto
      */
-    public function updateTemplate($templateId, $newName)
+    /*public function updateCampaign($campaignId, $newName)
     {
-        if (TemplateDto::MAX_LENGTH_NAME < strlen($newName)) {
-            throw new \InvalidArgumentException('Name must be ' . TemplateDto::MAX_LENGTH_NAME . ' characters or less');
+        if (CampaignDto::MAX_LENGTH_NAME < strlen($newName)) {
+            throw new \InvalidArgumentException('Name must be ' . CampaignDto::MAX_LENGTH_NAME . ' characters or less');
         }
         $options = ['name' => $newName];
-        $templateData = $this->patch("/{$templateId}", $options);
-        $templateDto = new TemplateDto($templateData);
+        $campaignData = $this->patch("/{$campaignId}", $options);
+        $campaignDto = new CampaignDto($campaignData);
 
-        return $templateDto;
-    }
+        return $campaignDto;
+    }*/
 
     /**
-     * @param string $templateId UUID of the template to delete
-     * @return bool  Returns true if the template was deleted. False otherwise.
+     * @param string $campaignId UUID of the campaign to delete
+     * @return bool  Returns true if the campaign was deleted. False otherwise.
      */
-    public function deleteTemplate($templateId)
+    public function deleteCampaign($campaignId)
     {
-        $this->delete("/{$templateId}");
+        $this->delete("/{$campaignId}");
         return (bool)(204 == $this->getLastSendGridResponse()->getStatusCode());
     }
 }
