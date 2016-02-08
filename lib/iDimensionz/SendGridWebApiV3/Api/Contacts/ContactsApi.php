@@ -70,18 +70,18 @@ class ContactsApi extends SendGridApiEndpointAbstract
                 $recipientsDto[] = new RecipientDto($recipientData);
             }
         }
-        
+
         return $recipientsDto;
     }
 
     /**
      * @param string $id UUID of recipient to retrieve
-     * @return array
+     * @return RecipientDto
      */
     public function getRecipient($recipientId)
     {
         $recipientData = $this->get('recipients/'.$recipientId);
-        $recipientDto = new TemplateDto($recipientData);
+        $recipientDto = new RecipientDto($recipientData);
         return $recipientDto;
     }
     
@@ -114,10 +114,19 @@ class ContactsApi extends SendGridApiEndpointAbstract
      */
     public function deleteRecipient($recipientId)
     {
-        $this->delete('recipients/'.$recipientId, ['decode_content'=>false]);
+        $this->delete('recipients/'.$recipientId, null, ['decode_content'=>false]);
         return (bool)(204 == $this->getLastSendGridResponse()->getStatusCode());
     }
     
+    /**
+     * @param array $recipientIds array of UUIDs of the Recipients to delete
+     * @return bool  Returns true if the Recipients was deleted. False otherwise.
+     */
+    public function deleteRecipients($recipientIds)
+    {
+        $this->delete('recipients', $recipientIds, ['decode_content'=>false]);
+        return (bool)(204 == $this->getLastSendGridResponse()->getStatusCode());
+    }
     
     
     /**
@@ -135,6 +144,23 @@ class ContactsApi extends SendGridApiEndpointAbstract
         }
     }
     
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getAllCustomFields()
+    {
+        $result = $this->get('custom_fields', ['decode_content'=>false]);
+
+        $customFieldDtos = [];
+        if (isset($result['custom_fields']) && is_array($result['custom_fields'])) {
+            foreach ($result['custom_fields'] as $customFieldData) {
+                $customFieldDtos[] = new CustomFieldDto($customFieldData);
+            }
+        }
+        
+        return $customFieldDtos;
+    }
     
     
     /**
@@ -153,12 +179,23 @@ class ContactsApi extends SendGridApiEndpointAbstract
     }
     
     /**
+     * @param string $id UUID of List to retrieve
+     * @return \iDimensionz\SendGridWebApiV3\Api\Contacts\ListDto
+     */
+    public function getList($listId)
+    {
+        $listData = $this->get('lists/'.$listId);
+        $listDto = new ListDto($listData);
+        return $listDto;
+    } 
+    
+    /**
      * @param string $listId UUID of the List to delete
      * @return bool  Returns true if the List was deleted. False otherwise.
      */
     public function deleteList($listId)
     {
-        $this->delete('lists/'.$listId, ['decode_content'=>false]);
+        $this->delete('lists/'.$listId, null, ['decode_content'=>false]);
         return (bool)(204 == $this->getLastSendGridResponse()->getStatusCode());
     }
     
@@ -183,11 +220,42 @@ class ContactsApi extends SendGridApiEndpointAbstract
      */
     public function addRecipientsToList($listId, $recipientIds)
     {
-        
-        $this->post('lists/'.$listId.'/recipients/', $recipientIds);
+        $this->post('lists/'.$listId.'/recipients', $recipientIds);
         return (bool)(201 == $this->getLastSendGridResponse()->getStatusCode());
     }
     
+    
+    /**
+     * @param int $listId
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getRecipientsInList($listId, $page=1, $page_size=100)
+    {
+        $result = $this->get('lists/'.$listId.'/recipients?page_size='.$page_size.'&page='.$page);
+        
+        $recipientsData = array();
+        if ($result) {
+            if (is_string($result)) {
+                $result = json_decode($result);
+            }
+            if (is_array($result) && count($result) && isset($result['recipients'])) {
+                $recipientsData = $result['recipients'];
+            }
+            if (is_object($result) && isset($result->recipients)) {
+                $recipientsData = $result->recipients;
+            }
+        }
+
+        $recipientsDto = [];
+        if ($recipientsData) {
+            foreach ($recipientsData as $recipientData) {
+                $recipientsDto[] = new RecipientDto($recipientData);
+            }
+        }
+
+        return $recipientsDto;
+    }
     
 }
  

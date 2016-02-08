@@ -122,13 +122,16 @@ abstract class ApiEndpointAbstract
      * @param $command
      * @return array|string
      */
-    public function delete($command)
+    public function delete($command, $data, $options = [])
     {
+        if ($data) {
+            $options['body'] = json_encode($data);
+        }
         if (!empty($command)) {
             $command = "/{$command}";
         }
         $this->setLastSendGridResponse(
-            $this->getSendGridRequest()->delete($this->getEndpoint() . $command)
+            $this->getSendGridRequest()->delete($this->getEndpoint() . $command, $options)
         );
 
         return $this->getLastSendGridResponse()->getContent();

@@ -83,19 +83,30 @@ class RecipientDto
      */
     public function __construct($recipient = [])
     {
-        
         if (isset($recipient['email']))         $this->setEmail($recipient['email']);
         if (isset($recipient['first_name']))    $this->setFirstName($recipient['first_name']);
         if (isset($recipient['last_name']))     $this->setFirstName($recipient['last_name']);
-        if (isset($recipient['custom_fields'])) $this->setCustomFields($recipient['custom_fields']);
-        
+        $customFields = [];
+        if (isset($recipient['custom_fields']) && is_array($recipient['custom_fields'])) {
+            foreach ($recipient['custom_fields'] as $name=>$value) {
+                if (is_array($value)) {
+                    if (isset($value['name']) && isset($value['value'])) {
+                        $customFields[$value['name']] = $value['value'];
+                    }
+                } else {
+                    $customFields[$name] = $value;
+                }
+            }
+        }
+        $this->setCustomFields($customFields);
+
         if (isset($recipient['id']))            $this->setId($recipient['id']);
         if (isset($recipient['created_at']))    $this->setCreatedAt($recipient['created_at']);
         if (isset($recipient['updated_at']))    $this->setUpdatedAt($recipient['updated_at']);
         if (isset($recipient['last_clicked']))  $this->setLastClicked($recipient['last_clicked']);
         if (isset($recipient['last_emailed']))  $this->setLastEmailed($recipient['last_emailed']);
         if (isset($recipient['last_opened']))   $this->setLastOpened($recipient['last_opened']);
-        
+
         // Mark all fields as unmodified.
         $this->setUpdatedFields([]);
     }
@@ -116,7 +127,7 @@ class RecipientDto
         $this->id = $id;
         //$this->addUpdatedField('id', $id);
     }
-    
+
     /**
      * @return string
      */
@@ -148,7 +159,7 @@ class RecipientDto
         $this->first_name = $first_name;
         $this->addUpdatedField('first_name', $first_name);
     }
-    
+
     /**
      * @return string
      */
@@ -164,7 +175,7 @@ class RecipientDto
         $this->last_name = $last_name;
         $this->addUpdatedField('last_name', $last_name);
     }
-    
+
     /**
      * @return int Unix Timestamp
      */
@@ -259,7 +270,7 @@ class RecipientDto
     public function setCustomFields($custom_fields)
     {
         $this->custom_fields = $custom_fields;
-        //$this->addUpdatedField('custom_fields', $custom_fields);
+        $this->addUpdatedField('custom_fields', $custom_fields);
     }
 
 

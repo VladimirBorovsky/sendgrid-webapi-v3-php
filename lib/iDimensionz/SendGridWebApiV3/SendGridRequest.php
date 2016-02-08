@@ -63,7 +63,7 @@ class SendGridRequest
         $this->setApiHost($apiHost);
         $this->setHttpClient($httpClient);
         // Default the Accept header to 'application/json'
-        $this->getHttpClient()->setDefaultHeaders(['Accept' => 'application/json']);
+        $this->getHttpClient()->setDefaultHeaders(['Accept' => 'application/json', 'Content-Type' => 'application/json']);
     }
 
     /**

@@ -111,7 +111,7 @@ class TemplatesApi extends SendGridApiEndpointAbstract
      */
     public function deleteTemplate($templateId)
     {
-        $this->delete("/{$templateId}");
+        $this->delete($templateId, null, ['decode_content'=>false]);
         return (bool)(204 == $this->getLastSendGridResponse()->getStatusCode());
     }
 }

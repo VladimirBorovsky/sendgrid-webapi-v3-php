@@ -108,7 +108,6 @@ class CampaignDto
         if (isset($campaign['ip_pool']))                $this->setIpPool($campaign['ip_pool']);
         if (isset($campaign['html_content']))           $this->setHtmlContent($campaign['html_content']);
         if (isset($campaign['plain_content']))          $this->setPlainContent($campaign['plain_content']);
-        if (isset($campaign['ip_pool']))                $this->setIpPool($campaign['ip_pool']);
         if (isset($campaign['status']))                 $this->setStatus($campaign['status']);
         // Mark all fields as unmodified.
         $this->setUpdatedFields([]);

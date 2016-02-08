@@ -80,10 +80,11 @@ class CampaignsApi extends SendGridApiEndpointAbstract
     public function createCampaign(CampaignDto $campaignDto)
     {
         $campaignData = $campaignDto->getUpdatedFields();
-        $result = $this->post('', $campaignData);
-        //$campaignDto = new CampaignDto($campaignData);
-var_dump($result); exit();
-        return $result;
+        $campaignData = $this->post('', $campaignData, ['decode_content'=>false]);
+        if (is_string($campaignData)) $campaignData = json_decode($campaignData);
+        if (is_object($campaignData)) $campaignData = get_object_vars($campaignData);
+        $campaignDto = new CampaignDto($campaignData);
+        return $campaignDto;
     }
 
     /**
@@ -92,28 +93,14 @@ var_dump($result); exit();
      */
     public function getCampaign($campaignId)
     {
-        $campaignData = $this->get("/{$campaignId}");
+        $campaignData = $this->get($campaignId, ['decode_content'=>false]);
+        if (is_string($campaignData)) $campaignData = json_decode($campaignData);
+        if (is_object($campaignData)) $campaignData = get_object_vars($campaignData);
+        
         $campaignDto = new CampaignDto($campaignData);
-
         return $campaignDto;
     }
 
-    /**
-     * @param string $campaignId UUID of campaign to update
-     * @param string $newName
-     * @return CampaignDto
-     */
-    /*public function updateCampaign($campaignId, $newName)
-    {
-        if (CampaignDto::MAX_LENGTH_NAME < strlen($newName)) {
-            throw new \InvalidArgumentException('Name must be ' . CampaignDto::MAX_LENGTH_NAME . ' characters or less');
-        }
-        $options = ['name' => $newName];
-        $campaignData = $this->patch("/{$campaignId}", $options);
-        $campaignDto = new CampaignDto($campaignData);
-
-        return $campaignDto;
-    }*/
 
     /**
      * @param string $campaignId UUID of the campaign to delete
@@ -121,7 +108,7 @@ var_dump($result); exit();
      */
     public function deleteCampaign($campaignId)
     {
-        $this->delete("/{$campaignId}");
+        $this->delete($campaignId, null, ['decode_content'=>false]);
         return (bool)(204 == $this->getLastSendGridResponse()->getStatusCode());
     }
 }
