@@ -89,7 +89,9 @@ abstract class ApiEndpointAbstract
      */
     public function patch($command, $data, $options = [])
     {
-        $options['body'] = json_encode($data);
+        if ($data) {
+            $options['body'] = json_encode($data);
+        }
         if (!empty($command)) {
             $command = "/{$command}";
         }
@@ -107,7 +109,9 @@ abstract class ApiEndpointAbstract
      */
     public function post($command, $data, $options = [])
     {
-        $options['body'] = json_encode($data);
+        if ($data) {
+            $options['body'] = json_encode($data);
+        }
         if (!empty($command)) {
             $command = "/{$command}";
         }
@@ -122,7 +126,7 @@ abstract class ApiEndpointAbstract
      * @param $command
      * @return array|string
      */
-    public function delete($command, $data, $options = [])
+    public function delete($command, $data = null, $options = [])
     {
         if ($data) {
             $options['body'] = json_encode($data);

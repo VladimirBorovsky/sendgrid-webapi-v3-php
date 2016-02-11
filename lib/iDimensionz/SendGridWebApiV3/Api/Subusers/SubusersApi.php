@@ -50,7 +50,7 @@ class SubusersApi extends SendGridApiEndpointAbstract
     public function getAllSubusers()
     {
         $result = $this->get('');
-        var_dump($result); eixt();
+var_dump($result); eixt();
         
         /*$templatesData = $result['templates'];
         $templateDtos = [];
@@ -80,10 +80,19 @@ var_dump($result); exit();
      */
     public function getSubuser($subuserId)
     {
-        $subuserData = $this->get("/{$subuserId}");
+        $subuserData = $this->get($subuserId);
         $userProfileDto = new UserProfileDto($subuserData);
         return $userProfileDto;
     }
 
+    /**
+     * @param string $subuserId UUID of the Subuser to delete
+     * @return bool  Returns true if the Subuser was deleted. False otherwise.
+     */
+    public function deleteSubuser($subuserId)
+    {
+        $this->delete($subuserId, null, ['decode_content'=>false]);
+        return (bool)(204 == $this->getLastSendGridResponse()->getStatusCode());
+    }
 }
  

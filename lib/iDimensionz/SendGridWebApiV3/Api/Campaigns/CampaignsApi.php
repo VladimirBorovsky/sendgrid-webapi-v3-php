@@ -73,7 +73,7 @@ class CampaignsApi extends SendGridApiEndpointAbstract
     }
 
     /**
-     * @param CampaignDto
+     * @param CampaignDto $campaignDto
      * @return CampaignDto
      * @throws \InvalidArgumentException
      */
@@ -101,6 +101,17 @@ class CampaignsApi extends SendGridApiEndpointAbstract
         return $campaignDto;
     }
 
+
+    /**
+     * @param string $campaignId UUID of the campaign to send now
+     * @return bool  Returns true if the mailing started. False otherwise.
+     */
+    public function sendCampaign($campaignId)
+    {
+        $this->post($campaignId.'/schedules/now', null, ['decode_content'=>false]);
+        return (bool)(201 == $this->getLastSendGridResponse()->getStatusCode());
+    }
+    
 
     /**
      * @param string $campaignId UUID of the campaign to delete

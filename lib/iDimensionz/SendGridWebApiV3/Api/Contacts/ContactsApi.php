@@ -45,6 +45,8 @@ class ContactsApi extends SendGridApiEndpointAbstract
 
     
     /**
+     * @param int $page
+     * @param int $page_size
      * @return array
      */
     public function getAllRecipients($page=1, $page_size=100)
@@ -75,7 +77,7 @@ class ContactsApi extends SendGridApiEndpointAbstract
     }
 
     /**
-     * @param string $id UUID of recipient to retrieve
+     * @param string $recipientId UUID of recipient to retrieve
      * @return RecipientDto
      */
     public function getRecipient($recipientId)
@@ -86,7 +88,7 @@ class ContactsApi extends SendGridApiEndpointAbstract
     }
     
     /**
-     * @param array RecipientsDto
+     * @param array $recipientsDto
      * @return array
      * @throws \InvalidArgumentException
      */
@@ -130,7 +132,7 @@ class ContactsApi extends SendGridApiEndpointAbstract
     
     
     /**
-     * @param CustomFieldDto
+     * @param CustomFieldDto $customFieldDto
      * @return array
      * @throws \InvalidArgumentException
      */
@@ -164,7 +166,7 @@ class ContactsApi extends SendGridApiEndpointAbstract
     
     
     /**
-     * @param ListDto
+     * @param ListDto $listDto
      * @return array
      * @throws \InvalidArgumentException
      */
@@ -177,9 +179,9 @@ class ContactsApi extends SendGridApiEndpointAbstract
             return $listDto;
         }
     }
-    
+
     /**
-     * @param string $id UUID of List to retrieve
+     * @param string $listId UUID of List to retrieve
      * @return \iDimensionz\SendGridWebApiV3\Api\Contacts\ListDto
      */
     public function getList($listId)
@@ -201,7 +203,7 @@ class ContactsApi extends SendGridApiEndpointAbstract
     
     
     /**
-     * @param int $listId
+     * @param string $listId
      * @param string $recipientId
      * @return bool
      * @throws \InvalidArgumentException
@@ -213,7 +215,7 @@ class ContactsApi extends SendGridApiEndpointAbstract
     }
     
     /**
-     * @param int $listId
+     * @param string $listId
      * @param array $recipientIds
      * @return bool
      * @throws \InvalidArgumentException
@@ -226,7 +228,9 @@ class ContactsApi extends SendGridApiEndpointAbstract
     
     
     /**
-     * @param int $listId
+     * @param string $listId
+     * @param int $page
+     * @param int $page_size
      * @return array
      * @throws \InvalidArgumentException
      */

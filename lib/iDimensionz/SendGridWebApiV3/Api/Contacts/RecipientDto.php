@@ -85,7 +85,7 @@ class RecipientDto
     {
         if (isset($recipient['email']))         $this->setEmail($recipient['email']);
         if (isset($recipient['first_name']))    $this->setFirstName($recipient['first_name']);
-        if (isset($recipient['last_name']))     $this->setFirstName($recipient['last_name']);
+        if (isset($recipient['last_name']))     $this->setLastName($recipient['last_name']);
         $customFields = [];
         if (isset($recipient['custom_fields']) && is_array($recipient['custom_fields'])) {
             foreach ($recipient['custom_fields'] as $name=>$value) {

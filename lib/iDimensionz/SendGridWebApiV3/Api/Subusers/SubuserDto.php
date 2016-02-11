@@ -126,7 +126,7 @@ class SubuserDto
     }
 
     /**
-     * @param string $ips
+     * @param array $ips
      */
     public function setIps($ips)
     {
