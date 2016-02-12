@@ -49,16 +49,6 @@ class SubusersApi extends SendGridApiEndpointAbstract
      */
     public function getAllSubusers()
     {
-        $result = $this->get('');
-var_dump($result); eixt();
-        
-        /*$templatesData = $result['templates'];
-        $templateDtos = [];
-        foreach ($templatesData as $templateData) {
-            $templateDtos[] = new TemplateDto($templateData);
-        }
-
-        return $templateDtos;*/
     }
 
     /**
@@ -69,29 +59,33 @@ var_dump($result); eixt();
     public function createSubuser(SubuserDto $subuserDto)
     {
         $subuserData = $subuserDto->getUpdatedFields();
-        $result = $this->post('', $subuserData);
-        //$templateDto = new TemplateDto($templateData);
-var_dump($result); exit();
-        return $result;
+        $subuserData = $this->post('', $subuserData, ['decode_content'=>false]);
+        if (is_string($subuserData)) $subuserData = json_decode($subuserData);
+        if (is_object($subuserData)) $subuserData = get_object_vars($subuserData);
+        $subuserDto = new SubuserDto($subuserData);
+        return $subuserDto;
     }
     
     /**
-     * @return 
+     * @param string $subuserName
+     * @return SubuserDto
      */
-    public function getSubuser($subuserId)
+    public function getSubuser($subuserName)
     {
-        $subuserData = $this->get($subuserId);
-        $userProfileDto = new UserProfileDto($subuserData);
-        return $userProfileDto;
+        $subuserData = $this->get($subuserName, ['decode_content'=>false]);
+        if (is_string($subuserData)) $subuserData = json_decode($subuserData);
+        if (is_object($subuserData)) $subuserData = get_object_vars($subuserData);
+        $subuserDto = new SubuserDto($subuserData);
+        return $subuserDto;
     }
 
     /**
      * @param string $subuserId UUID of the Subuser to delete
      * @return bool  Returns true if the Subuser was deleted. False otherwise.
      */
-    public function deleteSubuser($subuserId)
+    public function deleteSubuser($subuserName)
     {
-        $this->delete($subuserId, null, ['decode_content'=>false]);
+        $this->delete($subuserName, null, ['decode_content'=>false]);
         return (bool)(204 == $this->getLastSendGridResponse()->getStatusCode());
     }
 }

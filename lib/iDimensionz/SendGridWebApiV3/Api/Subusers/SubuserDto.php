@@ -46,7 +46,10 @@ class SubuserDto
      * @var array $ips
      */
     private $ips;
-
+    /**
+     * @var array $user_id
+     */
+    private $user_id;
 
     /**
      * @var array Fields that have been updated.
@@ -62,6 +65,7 @@ class SubuserDto
         if (isset($subuser['email']))       $this->setEmail($subuser['email']);
         if (isset($subuser['password']))    $this->setPassword($subuser['password']);
         if (isset($subuser['ips']))         $this->setIps($subuser['ips']);
+        if (isset($subuser['user_id']))    $this->setUserId($subuser['user_id']);
         // Mark all fields as unmodified.
         $this->setUpdatedFields([]);
     }
@@ -134,6 +138,22 @@ class SubuserDto
         $this->addUpdatedField('ips', $ips);
     }
 
+    /**
+     * @return string
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param array $user_id
+     */
+    public function setUserId($user_id)
+    {
+        $this->user_id = $user_id;
+        $this->addUpdatedField('user_id', $user_id);
+    }
 
     /**
      * @return array
@@ -170,6 +190,7 @@ class SubuserDto
         $output['email'] = $this->getEmail();
         $output['password'] = $this->getPassword();
         $output['ips'] = $this->getIps();
+        $output['user_id'] = $this->setUserId();
 
         return $output;
     }
